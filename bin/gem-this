@@ -116,8 +116,8 @@ spec = Gem::Specification.new do |s|
 
   s.has_rdoc          = true
 <% if readme %>
-  # s.extra_rdoc_files  = %w(<%= readme %>)
-  # s.rdoc_options      = %w(--main <%= readme %>)
+  s.extra_rdoc_files  = %w(<%= readme %>)
+  s.rdoc_options      = %w(--main <%= readme %>)
 
   # Add any extra files to include in the gem
 <% else %>  
