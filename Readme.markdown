@@ -11,7 +11,9 @@ Often, they'll try to generate a particular directory structure, with test stubs
 
 Even worse, sometimes they'll add themselves as dependencies for your gem!
 
-I am not interested in that. I just want the simplest thing that could possibly work, to build my gem and make it available to the world.
+I am not interested in that. I just want the simplest thing that could possibly work, to build my gem and make it available to the world. I will add any bells and whistles that I want later.
+
+And so:
 
 Gem This
 ========
@@ -36,7 +38,8 @@ When you run `gem-this`, it will create a new `Rakefile` in your project directo
     rake rerdoc                  # Force a rebuild of the RDOC files
     rake rubyforge:release       # Release gem and RDoc documentation to RubyForge
     rake rubyforge:release:docs  # Publish RDoc to RubyForge.
-  
+
+
 The simplest thing to do next is simply run `rake package`:
 
     mkdir -p pkg
@@ -50,6 +53,39 @@ As you can tell, it's used the current directory name as the name of the gem. Bu
 
 It tries to be a little bit clever, detecting the presence of a few directories (like `bin`, `test` and `spec`) and behave accordingly. If you're already using git, it will ignore the `rdoc` and `pkg` directories for you.
 
-But for the most part it simply sets up a good base for you to customise yourself, with as little fuss or overhead as possible. It's up to you if you want make it more sophisticated, but I trust you. 
+What next?
+----------
+
+For the most part, `gem-this` simply sets up a good base for you to customise yourself, with as little fuss or overhead as possible. It's up to you if you want make it more sophisticated, but I trust you. 
 
 Don't worry; you'll be fine.
+
+
+Thanks
+======
+
+Inspiration, and sometimes code chunks, were taking from lots of the existing gem tools, but particularly 'gemify' (wish I could've used that name!) and 'simple-gem'.
+
+
+MIT License
+===========
+
+(c) James Adam 2009, or whatever
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
