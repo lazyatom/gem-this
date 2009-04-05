@@ -7,9 +7,9 @@ But, more likely than that, it's just that I don't think that far ahead. I'm mor
 
 Anyway, sometimes - after a bit of tinkering and pondering - I do end up with a library that I consider gem-worthy and fit for consumption. But every time I look at the existing tools to build gems, I'm paralysed by the comprehensive nature of their function. 
 
-Often, they'll try to generate a particular directory structure, with test stubs and a website. 
+Often, they'll try to generate a particular directory structure, with test stubs and a website, which is fine in principle, but I've already got my code the way I want it; I'm not generating a new project.
 
-Even worse, sometimes they'll add themselves as dependencies for your gem!
+Even worse, sometimes they'll add themselves as dependencies for your gem! Yuck.
 
 I am not interested in that. I just want the simplest thing that could possibly work, to build my gem and make it available to the world. I will add any bells and whistles that I want later.
 
