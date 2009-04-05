@@ -15,20 +15,20 @@ spec = Gem::Specification.new do |s|
   
   # Change these as appropriate
   s.name              = "gem-this"
-  s.version           = "0.1.0"
-  s.summary           = "What this thing does"
-  s.author            = "Your name"
-  s.email             = "you@example.com"
-  s.homepage          = "http://example.com"
+  s.version           = "0.1.1"
+  s.summary           = "Make existing code into a gem, without any fuss."
+  s.author            = "James Adam"
+  s.email             = "james@lazyatom.com"
+  s.homepage          = "http://github.com/lazyatom/gem-this"
 
   s.has_rdoc          = true
   # s.extra_rdoc_files  = %w(Readme.markdown)
   # s.rdoc_options      = %w(--main Readme.markdown)
 
   # Add any extra files to include in the gem
-  s.files             = %w(Rakefile Readme.markdown) + Dir.glob("{bin}/**/*")
+  s.files             = %w(Rakefile Readme.markdown) + Dir.glob("{bin,lib}/**/*")
   s.executables       = FileList["bin/**"].map { |f| File.basename(f) }
-   
+  s.require_paths     = ["bin"]
   
   # If you want to depend on other gems, add them here, along with any
   # relevant versions

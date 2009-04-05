@@ -132,6 +132,7 @@ spec = Gem::Specification.new do |s|
 <% if has_executables? %>
   s.executables       = FileList["bin/**"].map { |f| File.basename(f) }
 <% end %>   
+  s.require_paths     = ["lib"]
   
   # If you want to depend on other gems, add them here, along with any
   # relevant versions
