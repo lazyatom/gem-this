@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{gem-this}
-  s.version = "0.1.1"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["James Adam"]
@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.default_executable = %q{gem-this}
   s.email = %q{james@lazyatom.com}
   s.executables = ["gem-this"]
-  s.files = ["Rakefile", "Readme.markdown", "bin/gem-this"]
+  s.files = ["Rakefile", "Readme.markdown", "Rakefile.erb", "bin/gem-this"]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/lazyatom/gem-this}
   s.require_paths = ["bin"]

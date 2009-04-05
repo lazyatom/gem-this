@@ -2,9 +2,29 @@ require "rubygems"
 require "rake/gempackagetask"
 require "rake/rdoctask"
 
+<% if using_rspec? %>
+task :default => :spec
+
+require "spec"
+require "spec/rake/spectask"
+Spec::Rake::SpecTask.new do |t|
+  t.spec_opts = %w(--format specdoc --colour)
+  t.libs = ["spec"]
+end
+<% elsif using_test_unit? %>
+task :default => :test
+
+require "rake/testtask"
+Rake::TestTask.new do |t|
+  t.libs << "test"
+  t.test_files = FileList["test/**/*_test.rb"]
+  t.verbose = true
+end
+<% else %>
 task :default => :package do
   puts "Don't forget to write some tests!"
 end
+<% end %>
 
 # This builds the actual gem. For details of what all these options
 # mean, and other ones you can add, check the documentation here:
@@ -14,32 +34,47 @@ end
 spec = Gem::Specification.new do |s|
   
   # Change these as appropriate
-  s.name              = "gem-this"
-  s.version           = "0.1.2"
-  s.summary           = "Make existing code into a gem, without any fuss."
-  s.author            = "James Adam"
-  s.email             = "james@lazyatom.com"
-  s.homepage          = "http://github.com/lazyatom/gem-this"
+  s.name              = "<%= gem_name %>"
+  s.version           = "0.1.0"
+  s.summary           = "What this thing does"
+  s.author            = "Your name"
+  s.email             = "you@example.com"
+  s.homepage          = "http://example.com"
 
   s.has_rdoc          = true
-  # s.extra_rdoc_files  = %w(Readme.markdown)
-  # s.rdoc_options      = %w(--main Readme.markdown)
+<% if readme %>
+  s.extra_rdoc_files  = %w(<%= readme %>)
+  s.rdoc_options      = %w(--main <%= readme %>)
 
   # Add any extra files to include in the gem
-  s.files             = %w(Rakefile Readme.markdown Rakefile.erb) + Dir.glob("{bin}/**/*")
+<% else %>  
+  # You should probably have a README of some kind. Change the filename
+  # as appropriate
+  # s.extra_rdoc_files  = %w(README)
+  # s.rdoc_options      = %w(--main README)
+
+  # Add any extra files to include in the gem (like your README)
+<% end %>
+  s.files             = %w(<%= files_in_root %>) + Dir.glob("{<%= dirs_to_include %>}/**/*")
+<% if has_executables? %>
   s.executables       = FileList["bin/**"].map { |f| File.basename(f) }
-  s.require_paths     = ["bin"]
+<% end %>   
+  s.require_paths     = ["lib"]
   
   # If you want to depend on other gems, add them here, along with any
   # relevant versions
   # s.add_dependency("some_other_gem", "~> 0.1.0")
   
+<% if using_rspec? %>
+  s.add_development_dependency("rspec") # add any other gems for testing/development
+<% else %>
   # If your tests use any gems, include them here
   # s.add_development_dependency("mocha")
+<% end %>
 
   # If you want to publish automatically to rubyforge, you'll may need
   # to tweak this, and the publishing task below too.
-  s.rubyforge_project = "gem-this"
+  s.rubyforge_project = "<%= gem_name %>"
 end
 
 # This task actually builds the gem. We also regenerate a static 
@@ -56,8 +91,8 @@ end
 
 # Generate documentation
 Rake::RDocTask.new do |rd|
-  rd.main = "Readme.markdown"
-  rd.rdoc_files.include("Readme.markdown", "lib/**/*.rb")
+  <% if readme %>rd.main = "<%= readme %>"<% end %>
+  rd.rdoc_files.include(<%= %{"#{readme}", } if readme %>"lib/**/*.rb")
   rd.rdoc_dir = "rdoc"
 end
 
@@ -83,7 +118,7 @@ begin
         )
  
         host = "#{config['username']}@rubyforge.org"
-        remote_dir = "/var/www/gforge-projects/gem-this/" # Should be the same as the rubyforge project name
+        remote_dir = "/var/www/gforge-projects/<%= gem_name %>/" # Should be the same as the rubyforge project name
         local_dir = 'rdoc'
  
         Rake::SshDirPublisher.new(host, remote_dir, local_dir).upload
