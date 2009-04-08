@@ -44,7 +44,8 @@ def using_git?
 end
 
 def add_to_gitignore
-  ignores = File.readlines(".gitignore") if File.exist?(".gitignore")
+  return unless File.exist?(".gitignore")
+  ignores = File.readlines(".gitignore")
   ignores += ["pkg", "rdoc"]
   File.open(".gitignore", "w") { |f| f.write ignores.map { |l| l.strip }.uniq.join("\n") }
 end
