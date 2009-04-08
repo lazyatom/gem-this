@@ -15,7 +15,7 @@ spec = Gem::Specification.new do |s|
   
   # Change these as appropriate
   s.name              = "gem-this"
-  s.version           = "0.1.3"
+  s.version           = "0.1.4"
   s.summary           = "Make existing code into a gem, without any fuss."
   s.author            = "James Adam"
   s.email             = "james@lazyatom.com"
@@ -68,6 +68,9 @@ end
 
 # If you want to publish to RubyForge automatically, here's a simple 
 # task to help do that. If you don't, just get rid of this.
+# Be sure to set up your Rubyforge account details with the Rubyforge
+# gem; you'll need to run `rubyforge setup` and `rubyforge config` at
+# the very least.
 begin
   require "rake/contrib/sshpublisher"
   namespace :rubyforge do
@@ -76,6 +79,18 @@ begin
     task :release => ["rubyforge:release:gem", "rubyforge:release:docs"]
     
     namespace :release do
+      desc "Release a new version of this gem"
+      task :gem => [:package] do
+        require 'rubyforge'
+        rubyforge = RubyForge.new
+        rubyforge.configure
+        rubyforge.login
+        rubyforge.userconfig['release_notes'] = spec.summary
+        path_to_gem = File.join(File.dirname(__FILE__), "pkg", "#{spec.name}-#{spec.version}.gem")
+        puts "Publishing #{spec.name}-#{spec.version.to_s} to Rubyforge..."
+        rubyforge.add_release(spec.rubyforge_project, spec.name, spec.version.to_s, path_to_gem)
+      end
+      
       desc "Publish RDoc to RubyForge."
       task :docs => [:rdoc] do
         config = YAML.load(
