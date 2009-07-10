@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'etc'
+
 args = ARGV.dup
 
 if args.first =~ /-?-h/
@@ -14,6 +16,18 @@ end
 debug = args.delete("-d")
 
 gem_name = args.first || File.basename(Dir.pwd)
+
+def author_name
+  Etc.getpwnam(ENV['USER']).gecos rescue ENV['USER'] # for Windows
+end
+
+def author_email
+  "youremail@example.com"
+end
+
+def author_url
+  "http://yoursite.example.com"
+end
 
 def using_rspec?
   File.directory?('spec')
