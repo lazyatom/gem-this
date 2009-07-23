@@ -34,7 +34,7 @@ end
 spec = Gem::Specification.new do |s|
   
   # Change these as appropriate
-  s.name              = "<%= gem_name %>"
+  s.name              = "<%= name %>"
   s.version           = "0.1.0"
   s.summary           = "What this thing does"
   s.author            = "<%= author_name %>"
@@ -74,7 +74,7 @@ spec = Gem::Specification.new do |s|
 
   # If you want to publish automatically to rubyforge, you'll may need
   # to tweak this, and the publishing task below too.
-  s.rubyforge_project = "<%= gem_name %>"
+  s.rubyforge_project = "<%= name %>"
 end
 
 # This task actually builds the gem. We also regenerate a static 
@@ -133,7 +133,7 @@ begin
         )
  
         host = "#{config['username']}@rubyforge.org"
-        remote_dir = "/var/www/gforge-projects/<%= gem_name %>/" # Should be the same as the rubyforge project name
+        remote_dir = "/var/www/gforge-projects/<%= name %>/" # Should be the same as the rubyforge project name
         local_dir = 'rdoc'
  
         Rake::SshDirPublisher.new(host, remote_dir, local_dir).upload

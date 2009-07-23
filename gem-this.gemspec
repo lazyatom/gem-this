@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.default_executable = %q{gem-this}
   s.email = %q{james@lazyatom.com}
   s.executables = ["gem-this"]
-  s.files = ["Rakefile", "Readme.markdown", "Rakefile.erb", "bin/gem-this", "lib/rubygems_plugin.rb"]
+  s.files = ["Rakefile", "Readme.markdown", "Rakefile.erb", "bin/gem-this", "lib/gem_this.rb", "lib/rubygems_plugin.rb"]
   s.homepage = %q{http://github.com/lazyatom/gem-this}
   s.require_paths = ["bin", "lib"]
   s.rubyforge_project = %q{gem-this}
