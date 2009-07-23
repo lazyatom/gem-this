@@ -24,6 +24,10 @@ The `gem-this` command expects to be run in the directory of your existing code:
     $ mate lib/sweet_code.rb
      ... hacking ...
     $ gem-this
+    
+New in 0.2.0: we also register a gem command, so you can just type:
+
+    $ gem this
   
 When you run `gem-this`, it will create a new `Rakefile` in your project directory. If you already had a `Rakefile`, it will append to the end of it, so your existing tasks are safe.
 

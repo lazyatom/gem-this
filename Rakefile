@@ -15,7 +15,7 @@ spec = Gem::Specification.new do |s|
   
   # Change these as appropriate
   s.name              = "gem-this"
-  s.version           = "0.1.5"
+  s.version           = "0.2.0"
   s.summary           = "Make existing code into a gem, without any fuss."
   s.author            = "James Adam"
   s.email             = "james@lazyatom.com"
@@ -26,9 +26,9 @@ spec = Gem::Specification.new do |s|
   # s.rdoc_options      = %w(--main Readme.markdown)
 
   # Add any extra files to include in the gem
-  s.files             = %w(Rakefile Readme.markdown Rakefile.erb) + Dir.glob("{bin}/**/*")
+  s.files             = %w(Rakefile Readme.markdown Rakefile.erb) + Dir.glob("{bin,lib}/**/*")
   s.executables       = FileList["bin/**"].map { |f| File.basename(f) }
-  s.require_paths     = ["bin"]
+  s.require_paths     = ["bin", "lib"]
   
   # If you want to depend on other gems, add them here, along with any
   # relevant versions
@@ -40,6 +40,8 @@ spec = Gem::Specification.new do |s|
   # If you want to publish automatically to rubyforge, you'll may need
   # to tweak this, and the publishing task below too.
   s.rubyforge_project = "gem-this"
+  
+  s.required_rubygems_version = Gem::Requirement.new(">= 1.3")
 end
 
 # This task actually builds the gem. We also regenerate a static 
