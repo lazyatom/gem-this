@@ -3,6 +3,7 @@ require 'shoulda'
 require 'fileutils'
 require 'tempfile'
 require 'yaml'
+require 'timeout'
 
 class GemBuilder
   attr_reader :gem_path
@@ -38,10 +39,12 @@ class GemBuilder
   end
   
   def build
+    result = nil
     FileUtils.cd(@gem_path) do
-      GemThis.new(@name, false).create_rakefile
-      `rake package 2>1`
+      result = GemThis.new(@name, false).create_rakefile
+      `rake package 2>&1`
     end
+    result
   end
   
   private
@@ -68,6 +71,12 @@ class Test::Unit::TestCase
   def assert_rake_task(task)
     tasks =  in_gem { `rake -T`.split("\n").map { |line| line.split[1] } }
     assert tasks.include?(task.to_s), tasks.inspect
+  end
+  
+  def assert_doesnt_hang(duration=5, message=nil, &block)
+    assert_nothing_raised("should return within #{duration} seconds") do
+      Timeout::timeout(duration, &block)
+    end
   end
   
   def in_gem(&block)

@@ -28,6 +28,10 @@ class GemThis
       end
       add_to_gitignore if using_git?
     end
+    unless has_lib_directory?
+      puts "You don't see to have a lib directory - please edit the Rakefile to set where your code is."
+      false
+    end
   end
   
   private
@@ -55,9 +59,18 @@ class GemThis
   def has_executables?
     File.directory?('bin')
   end
+  
+  def has_lib_directory?
+    File.directory?("lib")
+  end
 
-  def dirs_to_include
-    %w(bin test spec lib).select { |d| File.directory?(d) }.join(",")
+  def dirs_to_include_glob
+    dirs = %w(bin test spec lib).select { |d| File.directory?(d) }
+    if dirs.any?
+      dirs.join(",") + "/**/*"
+    else
+      "**/*"
+    end
   end
 
   def readme

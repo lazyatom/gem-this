@@ -8,7 +8,7 @@ class GemThisTest < Test::Unit::TestCase
         lib %w(thing.rb)
       end
     end
-
+  
     should "contain lib files" do
       assert_gem_contains "lib/thing.rb"
     end
@@ -43,7 +43,9 @@ class GemThisTest < Test::Unit::TestCase
     end
     
     should "not build the gem" do
-      assert !@gem.build
+      assert_doesnt_hang do
+        assert !@gem.build # the real test is whether or not this returns at all.
+      end
     end
   end
 end  

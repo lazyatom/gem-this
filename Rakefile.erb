@@ -55,12 +55,23 @@ spec = Gem::Specification.new do |s|
 
   # Add any extra files to include in the gem (like your README)
 <% end %>
-  s.files             = %w(<%= files_in_root %>) + Dir.glob("{<%= dirs_to_include %>}/**/*")
+  s.files             = %w(<%= files_in_root %>) + Dir.glob("{<%= dirs_to_include_glob %>}")
 <% if has_executables? %>
   s.executables       = FileList["bin/**"].map { |f| File.basename(f) }
-<% end %>   
+<% end %>
+<% if has_lib_directory? %>   
   s.require_paths     = ["lib"]
-  
+<% else %>
+
+  # You need to put your code in a directory which can then be added to
+  # the $LOAD_PATH by rubygems. Typically this is lib, but you don't seem
+  # to have that directory. You'll need to set the line below to whatever
+  # directory your code is in. Rubygems is going to assume lib if you leave
+  # this blank.
+  #
+  # s.require_paths = ["lib"]
+<% end %>
+
   # If you want to depend on other gems, add them here, along with any
   # relevant versions
   # s.add_dependency("some_other_gem", "~> 0.1.0")
