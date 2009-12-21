@@ -78,9 +78,12 @@ class Test::Unit::TestCase
     result
   end
   
-  def build_gem(name="test_gem", &block)
+  def create_gem(name="test_gem", &block)
     @gem = GemBuilder.new(name, &block)
-    @gem.build
+  end
+  
+  def build_gem(name="test_gem", &block)
+    create_gem(name, &block).build
   end
   
   def gem_spec

@@ -34,4 +34,16 @@ class GemThisTest < Test::Unit::TestCase
       assert_rake_task :spec
     end
   end
+  
+  context "When building a gem without a lib directory" do
+    setup do
+      create_gem do
+        code %w(my_code_is_in_here_for_some_reason.rb)
+      end
+    end
+    
+    should "not build the gem" do
+      assert !@gem.build
+    end
+  end
 end  
