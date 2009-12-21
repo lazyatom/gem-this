@@ -4,14 +4,14 @@ require 'etc'
 class GemThis
   SUMMARY = "Creates a Rakefile suitable for turning the current project into a gem."
   DEBUG_MESSAGE = "debug, only prints out the generated Rakefile."
-  
+
   attr_reader :name, :debug
-  
+
   def initialize(name, debug)
     @name = name
     @debug = debug
   end
-  
+
   def create_rakefile
     template = ERB.new File.read(File.join(File.dirname(__FILE__), '..', 'Rakefile.erb')), nil, '<>'
     rakefile = template.result(binding)
@@ -33,9 +33,9 @@ class GemThis
       false
     end
   end
-  
+
   private
-  
+
   def author_name
     Etc.getpwnam(ENV['USER']).gecos rescue ENV['USER'] # for Windows
   end
@@ -59,7 +59,7 @@ class GemThis
   def has_executables?
     File.directory?('bin')
   end
-  
+
   def has_lib_directory?
     File.directory?("lib")
   end
