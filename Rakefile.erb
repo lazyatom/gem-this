@@ -2,8 +2,23 @@ require "rubygems"
 require "rake/gempackagetask"
 require "rake/rdoctask"
 
+<% extra_default_tasks = [] %>
+<% development_dependencies = [] %>
+
+<% if using_cucumber? %>
+require 'cucumber'
+require 'cucumber/rake/task'
+Cucumber::Rake::Task.new('features') do |t|
+  t.cucumber_opts = %w{--format pretty}
+end
+<%
+extra_default_tasks << 'features'
+development_dependencies << 'cucumber'
+%>
+<% end %>
 <% if using_rspec? %>
-task :default => :spec
+<% development_dependencies << 'rspec' %>
+task :default => <%= ([:spec] + extra_default_tasks).inspect %>
 
 require "spec"
 require "spec/rake/spectask"
@@ -12,7 +27,8 @@ Spec::Rake::SpecTask.new do |t|
   t.libs = ["spec"]
 end
 <% elsif using_test_unit? %>
-task :default => :test
+<% development_dependencies << 'mocha' %>
+task :default => <%= ([:test] + extra_default_tasks).inspect %>
 
 require "rake/testtask"
 Rake::TestTask.new do |t|
@@ -32,7 +48,7 @@ end
 #   http://rubygems.org/read/chapter/20
 #
 spec = Gem::Specification.new do |s|
-  
+
   # Change these as appropriate
   s.name              = "<%= name %>"
   s.version           = "0.1.0"
@@ -47,7 +63,7 @@ spec = Gem::Specification.new do |s|
   s.rdoc_options      = %w(--main <%= readme %>)
 
   # Add any extra files to include in the gem
-<% else %>  
+<% else %>
   # You should probably have a README of some kind. Change the filename
   # as appropriate
   # s.extra_rdoc_files  = %w(README)
@@ -75,12 +91,10 @@ spec = Gem::Specification.new do |s|
   # If you want to depend on other gems, add them here, along with any
   # relevant versions
   # s.add_dependency("some_other_gem", "~> 0.1.0")
-  
-<% if using_rspec? %>
-  s.add_development_dependency("rspec") # add any other gems for testing/development
-<% else %>
+
   # If your tests use any gems, include them here
-  # s.add_development_dependency("mocha")
+<% development_dependencies.each do |dependency| %>
+  s.add_development_dependency("<%= dependency %>")
 <% end %>
 
   # If you want to publish automatically to rubyforge, you'll may need
@@ -88,13 +102,13 @@ spec = Gem::Specification.new do |s|
   s.rubyforge_project = "<%= name %>"
 end
 
-# This task actually builds the gem. We also regenerate a static 
+# This task actually builds the gem. We also regenerate a static
 # .gemspec file, which is useful if something (i.e. GitHub) will
 # be automatically building a gem for this project. If you're not
 # using GitHub, edit as appropriate.
 Rake::GemPackageTask.new(spec) do |pkg|
   pkg.gem_spec = spec
-  
+
   # Generate the gemspec file for github.
   file = File.dirname(__FILE__) + "/#{spec.name}.gemspec"
   File.open(file, "w") {|f| f << spec.to_ruby }
@@ -112,7 +126,7 @@ task :clean => [:clobber_rdoc, :clobber_package] do
   rm "#{spec.name}.gemspec"
 end
 
-# If you want to publish to RubyForge automatically, here's a simple 
+# If you want to publish to RubyForge automatically, here's a simple
 # task to help do that. If you don't, just get rid of this.
 # Be sure to set up your Rubyforge account details with the Rubyforge
 # gem; you'll need to run `rubyforge setup` and `rubyforge config` at
@@ -120,10 +134,10 @@ end
 begin
   require "rake/contrib/sshpublisher"
   namespace :rubyforge do
-    
+
     desc "Release gem and RDoc documentation to RubyForge"
     task :release => ["rubyforge:release:gem", "rubyforge:release:docs"]
-    
+
     namespace :release do
       desc "Release a new version of this gem"
       task :gem => [:package] do
@@ -136,17 +150,17 @@ begin
         puts "Publishing #{spec.name}-#{spec.version.to_s} to Rubyforge..."
         rubyforge.add_release(spec.rubyforge_project, spec.name, spec.version.to_s, path_to_gem)
       end
-    
+
       desc "Publish RDoc to RubyForge."
       task :docs => [:rdoc] do
         config = YAML.load(
             File.read(File.expand_path('~/.rubyforge/user-config.yml'))
         )
- 
+
         host = "#{config['username']}@rubyforge.org"
         remote_dir = "/var/www/gforge-projects/<%= name %>/" # Should be the same as the rubyforge project name
         local_dir = 'rdoc'
- 
+
         Rake::SshDirPublisher.new(host, remote_dir, local_dir).upload
       end
     end

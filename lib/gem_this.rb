@@ -52,6 +52,10 @@ class GemThis
     File.directory?('spec')
   end
 
+  def using_cucumber?
+    File.directory?('features')
+  end
+
   def using_test_unit?
     File.directory?('test')
   end
