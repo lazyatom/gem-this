@@ -2,8 +2,13 @@ require "rubygems"
 require "rake/gempackagetask"
 require "rake/rdoctask"
 
-task :default => :package do
-  puts "Don't forget to write some tests!"
+task :default => :test
+
+require "rake/testtask"
+Rake::TestTask.new do |t|
+  t.libs = [File.expand_path("lib"), "test"]
+  t.test_files = FileList["test/**/*_test.rb"]
+  t.verbose = true
 end
 
 # This builds the actual gem. For details of what all these options
@@ -35,7 +40,8 @@ spec = Gem::Specification.new do |s|
   # s.add_dependency("some_other_gem", "~> 0.1.0")
   
   # If your tests use any gems, include them here
-  # s.add_development_dependency("mocha")
+  s.add_development_dependency("shoulda")
+  s.add_development_dependency("rspec")
 
   # If you want to publish automatically to rubyforge, you'll may need
   # to tweak this, and the publishing task below too.
