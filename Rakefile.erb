@@ -22,10 +22,6 @@ Rake::TestTask.new do |t|
   t.test_files = FileList["test/**/*_test.rb"]
   t.verbose = true
 end
-<% else %>
-task :default => :package do
-  puts "Don't forget to write some tests!"
-end
 <% end %>
 <% if using_cucumber? %>
 <% default_tasks << :features %>
@@ -37,7 +33,13 @@ Cucumber::Rake::Task.new('features') do |t|
   t.cucumber_opts = %w{--format pretty}
 end
 <% end %>
-<% unless default_tasks.empty? %>
+<% if default_tasks.empty? %>
+
+task :default => :package do
+  puts "Don't forget to write some tests!"
+end
+
+<% else %>
 
 task :default => <%= default_tasks.inspect %>
 
