@@ -20,7 +20,7 @@ spec = Gem::Specification.new do |s|
 
   # Change these as appropriate
   s.name              = "gem-this"
-  s.version           = "0.2.1"
+  s.version           = "0.3.0"
   s.summary           = "Make existing code into a gem, without any fuss."
   s.author            = "James Adam"
   s.email             = "james@lazyatom.com"
