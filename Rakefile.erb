@@ -1,24 +1,11 @@
 require "rubygems"
 require "rake/gempackagetask"
 require "rake/rdoctask"
-
-<% extra_default_tasks = [] %>
+<% default_tasks = [] %>
 <% development_dependencies = [] %>
-
-<% if using_cucumber? %>
-require 'cucumber'
-require 'cucumber/rake/task'
-Cucumber::Rake::Task.new('features') do |t|
-  t.cucumber_opts = %w{--format pretty}
-end
-<%
-extra_default_tasks << 'features'
-development_dependencies << 'cucumber'
-%>
-<% end %>
 <% if using_rspec? %>
-<% development_dependencies << 'rspec' %>
-task :default => <%= ([:spec] + extra_default_tasks).inspect %>
+<% development_dependencies <<:rspec %>
+<% default_tasks << :spec %>
 
 require "spec"
 require "spec/rake/spectask"
@@ -27,7 +14,7 @@ Spec::Rake::SpecTask.new do |t|
   t.libs = ["spec"]
 end
 <% elsif using_test_unit? %>
-task :default => <%= ([:test] + extra_default_tasks).inspect %>
+<% default_tasks << :test %>
 
 require "rake/testtask"
 Rake::TestTask.new do |t|
@@ -40,7 +27,21 @@ task :default => :package do
   puts "Don't forget to write some tests!"
 end
 <% end %>
+<% if using_cucumber? %>
+<% default_tasks << :features %>
+<% development_dependencies << :cucumber %>
 
+require 'cucumber'
+require 'cucumber/rake/task'
+Cucumber::Rake::Task.new('features') do |t|
+  t.cucumber_opts = %w{--format pretty}
+end
+<% end %>
+<% unless default_tasks.empty? %>
+
+task :default => <%= default_tasks.inspect %>
+
+<% end %>
 # This builds the actual gem. For details of what all these options
 # mean, and other ones you can add, check the documentation here:
 #
@@ -74,7 +75,7 @@ spec = Gem::Specification.new do |s|
 <% if has_executables? %>
   s.executables       = FileList["bin/**"].map { |f| File.basename(f) }
 <% end %>
-<% if has_lib_directory? %>   
+<% if has_lib_directory? %>
   s.require_paths     = ["lib"]
 <% else %>
 

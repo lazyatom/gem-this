@@ -35,6 +35,23 @@ class GemThisTest < Test::Unit::TestCase
     end
   end
 
+  context "When building a gem with features" do
+    setup do
+      build_gem do
+        lib %(thing.rb)
+        features %w(gem-this.feature)
+      end
+    end
+
+    should "create a rake task for running features" do
+      assert_rake_task :features
+    end
+
+    should "add a features task to the default rake task dependencies" do
+      assert_default_rake_task_dependencies_contains :features
+    end
+  end
+
   context "When building a gem without a lib directory" do
     setup do
       create_gem do
