@@ -1,12 +1,8 @@
 require "rubygems"
 require "rake/gempackagetask"
 require "rake/rdoctask"
-<% default_tasks = [] %>
-<% development_dependencies = [] %>
-<% if using_rspec? %>
-<% development_dependencies <<:rspec %>
-<% default_tasks << :spec %>
 
+<% if using_rspec? %>
 require "spec"
 require "spec/rake/spectask"
 Spec::Rake::SpecTask.new do |t|
@@ -14,8 +10,6 @@ Spec::Rake::SpecTask.new do |t|
   t.libs = ["spec"]
 end
 <% elsif using_test_unit? %>
-<% default_tasks << :test %>
-
 require "rake/testtask"
 Rake::TestTask.new do |t|
   t.libs << "test"
@@ -23,27 +17,23 @@ Rake::TestTask.new do |t|
   t.verbose = true
 end
 <% end %>
-<% if using_cucumber? %>
-<% default_tasks << :features %>
-<% development_dependencies << :cucumber %>
 
+<% if using_cucumber? %>
 require 'cucumber'
 require 'cucumber/rake/task'
 Cucumber::Rake::Task.new('features') do |t|
   t.cucumber_opts = %w{--format pretty}
 end
 <% end %>
-<% if default_tasks.empty? %>
 
+<% if default_tasks.empty? %>
 task :default => :package do
   puts "Don't forget to write some tests!"
 end
-
 <% else %>
-
 task :default => <%= default_tasks.inspect %>
-
 <% end %>
+
 # This builds the actual gem. For details of what all these options
 # mean, and other ones you can add, check the documentation here:
 #
@@ -95,8 +85,12 @@ spec = Gem::Specification.new do |s|
   # s.add_dependency("some_other_gem", "~> 0.1.0")
 
   # If your tests use any gems, include them here
+<% if development_dependencies.any? %>
 <% development_dependencies.each do |dependency| %>
   s.add_development_dependency("<%= dependency %>")
+<% end %>
+<% else %>
+  # s.add_development_dependency("mocha") # for example
 <% end %>
 
   # If you want to publish automatically to rubyforge, you'll may need

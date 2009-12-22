@@ -89,6 +89,21 @@ class GemThis
     File.exist?(".git")
   end
 
+  def default_tasks
+    tasks = []
+    tasks << "test" if using_test_unit?
+    tasks << "spec" if using_rspec?
+    tasks << "features" if using_cucumber?
+    tasks
+  end
+
+  def development_dependencies
+    deps = []
+    deps << "rspec" if using_rspec?
+    deps << "cucumber" if using_cucumber?
+    deps
+  end
+
   def add_to_gitignore
     return unless File.exist?(".gitignore")
     ignores = File.readlines(".gitignore")

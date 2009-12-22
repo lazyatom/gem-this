@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.3") if s.respond_to? :required_rubygems_version=
   s.authors = ["James Adam"]
-  s.date = %q{2009-12-21}
+  s.date = %q{2009-12-22}
   s.default_executable = %q{gem-this}
   s.email = %q{james@lazyatom.com}
   s.executables = ["gem-this"]
@@ -24,12 +24,15 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
+      s.add_development_dependency(%q<cucumber>, [">= 0"])
     else
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
+      s.add_dependency(%q<cucumber>, [">= 0"])
     end
   else
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 0"])
+    s.add_dependency(%q<cucumber>, [">= 0"])
   end
 end
