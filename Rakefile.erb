@@ -27,7 +27,6 @@ Spec::Rake::SpecTask.new do |t|
   t.libs = ["spec"]
 end
 <% elsif using_test_unit? %>
-<% development_dependencies << 'mocha' %>
 task :default => <%= ([:test] + extra_default_tasks).inspect %>
 
 require "rake/testtask"
