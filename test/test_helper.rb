@@ -110,7 +110,7 @@ class Test::Unit::TestCase
   private
   def find_task(task_name)
     @tasks ||= Rake.application.tasks
-    @tasks.select{|task| task.name == task_name}[0]
+    @tasks.find {|task| task.name == task_name}
   end
 
   def prerequisites_for(task_name)
