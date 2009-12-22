@@ -42,7 +42,7 @@ class GemBuilder
   def build
     result = nil
     FileUtils.cd(@gem_path) do
-      result = GemThis.new(@name, false).create_rakefile
+      result = GemThis.new(@name, :debug => false, :silent => true).create_rakefile
       `rake package 2>&1`
     end
     result

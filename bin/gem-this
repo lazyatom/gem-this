@@ -15,6 +15,6 @@ end
 
 debug = args.delete("-d")
 
-GemThis.new(args.first || File.basename(Dir.pwd), debug).create_rakefile
+GemThis.new(args.first || File.basename(Dir.pwd), :debug => debug).create_rakefile
 
 exit

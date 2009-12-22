@@ -15,7 +15,7 @@ class Gem::Commands::ThisCommand < Gem::Command
   end
   
   def execute
-    GemThis.new(options[:args].first || File.basename(Dir.pwd), options[:debug]).create_rakefile
+    GemThis.new(options[:args].first || File.basename(Dir.pwd), options).create_rakefile
   end
 end
 

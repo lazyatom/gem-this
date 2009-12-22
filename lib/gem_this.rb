@@ -7,9 +7,11 @@ class GemThis
 
   attr_reader :name, :debug
 
-  def initialize(name, debug)
+  def initialize(name, options={})
     @name = name
-    @debug = debug
+    options = {:default => false, :silent => false}.update(options)
+    @debug = options[:debug]
+    @silent = options[:silent]
   end
 
   def create_rakefile
@@ -20,21 +22,25 @@ class GemThis
       puts rakefile
     else
       if File.exist?('Rakefile')
-        puts "Appended to existing Rakefile"
+        log "Appended to existing Rakefile"
         File.open('Rakefile', 'a') { |f| 2.times { f.puts }; f.write rakefile }
       else
-        puts "Writing new Rakefile"
+        log "Writing new Rakefile"
         File.open('Rakefile', 'w') { |f| f.write rakefile }
       end
       add_to_gitignore if using_git?
     end
     unless has_lib_directory?
-      puts "You don't see to have a lib directory - please edit the Rakefile to set where your code is."
+      log "You don't see to have a lib directory - please edit the Rakefile to set where your code is."
       false
     end
   end
 
   private
+
+  def log(message)
+    puts(message) unless @silent
+  end
 
   def author_name
     Etc.getpwnam(ENV['USER']).gecos rescue ENV['USER'] # for Windows
