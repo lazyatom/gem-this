@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'erb'
 require 'etc'
 
@@ -31,7 +32,7 @@ class GemThis
       add_to_gitignore if using_git?
     end
     unless has_lib_directory?
-      log "You don't see to have a lib directory - please edit the Rakefile to set where your code is."
+      log "You don't seem to have a lib directory - please edit the Rakefile to set where your code is."
       false
     end
   end
@@ -47,7 +48,14 @@ class GemThis
   end
 
   def author_email
-    "youremail@example.com"
+    email = ''
+
+    # even if using git, author may not have specified email address
+    if using_git?
+      email = %x{git config --get user.email}.strip
+    end
+
+    email == '' ? "youremail@example.com" : email
   end
 
   def author_url
