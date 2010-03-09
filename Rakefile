@@ -57,11 +57,15 @@ end
 # using GitHub, edit as appropriate.
 Rake::GemPackageTask.new(spec) do |pkg|
   pkg.gem_spec = spec
+end
 
-  # Generate the gemspec file for github.
+desc "Build the gemspec file #{spec.name}.gemspec"
+task :gemspec do
   file = File.dirname(__FILE__) + "/#{spec.name}.gemspec"
   File.open(file, "w") {|f| f << spec.to_ruby }
 end
+
+task :package => :gemspec
 
 # Generate documentation
 Rake::RDocTask.new do |rd|
