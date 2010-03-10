@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{gem-this}
-  s.version = "0.3.2"
+  s.version = "0.3.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.3") if s.respond_to? :required_rubygems_version=
   s.authors = ["James Adam"]
-  s.date = %q{2010-01-30}
+  s.date = %q{2010-03-10}
   s.default_executable = %q{gem-this}
   s.email = %q{james@lazyatom.com}
   s.executables = ["gem-this"]
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/lazyatom/gem-this}
   s.require_paths = ["bin", "lib"]
   s.rubyforge_project = %q{gem-this}
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{Make existing code into a gem, without any fuss.}
 
   if s.respond_to? :specification_version then
