@@ -111,6 +111,11 @@ task :gemspec do
   File.open(file, "w") {|f| f << spec.to_ruby }
 end
 
+# If you don't want to generate the .gemspec file, just remove this line. Reasons
+# why you might want to generate a gemspec:
+#  - using bundler with a git source
+#  - building the gem without rake (i.e. gem build blah.gemspec)
+#  - maybe others?
 task :package => :gemspec
 
 # Generate documentation
