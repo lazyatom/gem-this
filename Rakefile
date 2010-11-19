@@ -20,7 +20,7 @@ spec = Gem::Specification.new do |s|
 
   # Change these as appropriate
   s.name              = "gem-this"
-  s.version           = "0.3.3"
+  s.version           = "0.3.4"
   s.summary           = "Make existing code into a gem, without any fuss."
   s.author            = "James Adam"
   s.email             = "james@lazyatom.com"
@@ -31,7 +31,7 @@ spec = Gem::Specification.new do |s|
   # s.rdoc_options      = %w(--main Readme.markdown)
 
   # Add any extra files to include in the gem
-  s.files             = %w(Rakefile Readme.markdown Rakefile.erb) + Dir.glob("{bin,lib}/**/*")
+  s.files             = %w(Rakefile Readme.markdown Rakefile.erb) + Dir.glob("{bin,lib,test}/**/*")
   s.executables       = FileList["bin/**"].map { |f| File.basename(f) }
   s.require_paths     = ["bin", "lib"]
 
@@ -79,45 +79,18 @@ task :clean => [:clobber_rdoc, :clobber_package] do
   rm "#{spec.name}.gemspec"
 end
 
-# If you want to publish to RubyForge automatically, here's a simple
-# task to help do that. If you don't, just get rid of this.
-# Be sure to set up your Rubyforge account details with the Rubyforge
-# gem; you'll need to run `rubyforge setup` and `rubyforge config` at
-# the very least.
-begin
-  require "rake/contrib/sshpublisher"
-  namespace :rubyforge do
-
-    desc "Release gem and RDoc documentation to RubyForge"
-    task :release => ["rubyforge:release:gem", "rubyforge:release:docs"]
-
-    namespace :release do
-      desc "Release a new version of this gem"
-      task :gem => [:package] do
-        require 'rubyforge'
-        rubyforge = RubyForge.new
-        rubyforge.configure
-        rubyforge.login
-        rubyforge.userconfig['release_notes'] = spec.summary
-        path_to_gem = File.join(File.dirname(__FILE__), "pkg", "#{spec.name}-#{spec.version}.gem")
-        puts "Publishing #{spec.name}-#{spec.version.to_s} to Rubyforge..."
-        rubyforge.add_release(spec.rubyforge_project, spec.name, spec.version.to_s, path_to_gem)
-      end
-
-      desc "Publish RDoc to RubyForge."
-      task :docs => [:rdoc] do
-        config = YAML.load(
-            File.read(File.expand_path('~/.rubyforge/user-config.yml'))
-        )
-
-        host = "#{config['username']}@rubyforge.org"
-        remote_dir = "/var/www/gforge-projects/gem-this/" # Should be the same as the rubyforge project name
-        local_dir = 'rdoc'
-
-        Rake::SshDirPublisher.new(host, remote_dir, local_dir).upload
-      end
+desc 'Tag the repository in git with gem version number'
+task :tag => [:gemspec, :package] do
+  if `git diff --cached`.empty?
+    if `git tag`.split("\n").include?("v#{spec.version}")
+      raise "Version #{spec.version} has already been released"
     end
+    `git add #{File.expand_path("../#{spec.name}.gemspec", __FILE__)}`
+    `git commit -m "Released version #{spec.version}"`
+    `git tag v#{spec.version}`
+    `git push --tags`
+    `git push`
+  else
+    raise "Unstaged changes still waiting to be committed"
   end
-rescue LoadError
-  puts "Rake SshDirPublisher is unavailable or your rubyforge environment is not configured."
 end
