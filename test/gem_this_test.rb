@@ -6,11 +6,16 @@ class GemThisTest < Test::Unit::TestCase
       build_gem do
         touch "README"
         touch "lib/thing.rb"
+        touch "lib/thing/some/aspect/many/levels/deep.rb"
       end
     end
 
     should "contain lib files" do
       assert_gem_contains "lib/thing.rb"
+    end
+    
+    should "contain deeply nested files" do
+      assert_gem_contains "lib/thing/some/aspect/many/levels/deep.rb"
     end
 
     should "include the README" do
