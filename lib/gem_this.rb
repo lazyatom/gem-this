@@ -84,11 +84,11 @@ class GemThis
 
   def dirs_to_include_glob
     dirs = %w(bin test spec lib).select { |d| File.directory?(d) }
+    glob_parts = ["**", "*"]
     if dirs.any?
-      dirs.join(",") + "/**/*"
-    else
-      "**/*"
+      glob_parts.unshift("{"+dirs.join(",")+"}")
     end
+    File.join(*glob_parts)
   end
 
   def readme

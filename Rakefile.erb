@@ -63,7 +63,7 @@ spec = Gem::Specification.new do |s|
 
   # Add any extra files to include in the gem (like your README)
 <% end %>
-  s.files             = %w(<%= files_in_root %>) + Dir.glob("{<%= dirs_to_include_glob %>}")
+  s.files             = %w(<%= files_in_root %>) + Dir.glob(<%= dirs_to_include_glob.inspect %>)
 <% if has_executables? %>
   s.executables       = FileList["bin/**"].map { |f| File.basename(f) }
 <% end %>
