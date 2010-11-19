@@ -21,6 +21,24 @@ class GemThisTest < Test::Unit::TestCase
       assert_gem_spec :require_paths, ["lib"]
     end
   end
+  
+  context "When building a gem with tests" do
+    setup do
+      build_gem do
+        touch "lib/thing.rb"
+        touch "test/thing_test.rb"
+      end
+    end
+
+    should "contain test files" do
+      assert_gem_contains "test/thing_test.rb"
+    end
+    
+    should "create a rake task for running tests" do
+      assert_rake_task :test
+    end
+    
+  end
 
   context "When building a gem with specs" do
     setup do
@@ -28,6 +46,10 @@ class GemThisTest < Test::Unit::TestCase
         touch "lib/thing.rb"
         touch "spec/my_spec.rb"
       end
+    end
+    
+    should "contain spec files" do
+      assert_gem_contains "spec/my_spec.rb"
     end
 
     should "create a rake task for running specs" do
