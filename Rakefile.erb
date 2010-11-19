@@ -3,11 +3,10 @@ require "rake/gempackagetask"
 require "rake/rdoctask"
 
 <% if using_rspec? %>
-require "spec"
-require "spec/rake/spectask"
-Spec::Rake::SpecTask.new do |t|
-  t.spec_opts = %w(--format specdoc --colour)
-  t.libs = ["spec"]
+require "rspec"
+require "rspec/core/rake_task"
+RSpec::Core::RakeTask.new do |t|
+  t.rspec_opts = %w(--format specdoc --colour)
 end
 <% elsif using_test_unit? %>
 require "rake/testtask"
