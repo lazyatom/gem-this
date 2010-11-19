@@ -18,20 +18,8 @@ class GemBuilder
     end
   end
 
-  def method_missing(name, *args)
-    in_directory(name) do
-      args.each { |f| file(f) }
-      yield if block_given?
-    end
-  end
-
-  def in_directory(name, &block)
-    path = File.join(@gem_path, name.to_s)
-    FileUtils.mkdir_p(path)
-    FileUtils.cd(path, &block)
-  end
-
-  def file(name)
+  def touch(name)
+    FileUtils.mkdir_p(File.dirname(name))
     FileUtils.touch(name)
   end
 

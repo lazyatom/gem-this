@@ -4,8 +4,8 @@ class GemThisTest < Test::Unit::TestCase
   context "When building a gem" do
     setup do
       build_gem do
-        file "README"
-        lib %w(thing.rb)
+        touch "README"
+        touch "lib/thing.rb"
       end
     end
 
@@ -25,8 +25,8 @@ class GemThisTest < Test::Unit::TestCase
   context "When building a gem with specs" do
     setup do
       build_gem do
-        lib %w(thing.rb)
-        spec %w(my_spec.rb)
+        touch "lib/thing.rb"
+        touch "spec/my_spec.rb"
       end
     end
 
@@ -38,8 +38,8 @@ class GemThisTest < Test::Unit::TestCase
   context "When building a gem with features" do
     setup do
       build_gem do
-        lib %(thing.rb)
-        features %w(gem-this.feature)
+        touch "lib/thing.rb"
+        touch "features/gem-this.feature"
       end
     end
 
@@ -55,7 +55,7 @@ class GemThisTest < Test::Unit::TestCase
   context "When building a gem without a lib directory" do
     setup do
       create_gem do
-        code %w(my_code_is_in_here_for_some_reason.rb)
+        touch "code/my_code_is_in_here_for_some_reason.rb"
       end
     end
 
