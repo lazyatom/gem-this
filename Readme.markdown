@@ -40,8 +40,6 @@ When you run `gem-this`, it will create a new `Rakefile` in your project directo
     rake rdoc                    # Build the rdoc HTML Files
     rake repackage               # Force a rebuild of the package files
     rake rerdoc                  # Force a rebuild of the RDOC files
-    rake rubyforge:release       # Release gem and RDoc documentation to RubyForge
-    rake rubyforge:release:docs  # Publish RDoc to RubyForge.
 
 
 The simplest thing to do next is simply run `rake package`:
@@ -63,6 +61,37 @@ What next?
 For the most part, `gem-this` simply sets up a good base for you to customise yourself, with as little fuss or overhead as possible. It's up to you if you want make it more sophisticated, but I trust you. 
 
 Don't worry; you'll be fine.
+
+
+Advanced usage!
+---------------
+
+If you have developed some custom tasks that you find yourself using again and again, and want them to be made available for any new gems you create, now you can! Just drop your tasks into `~/.gem-this`, and they will be automatically copied into any Rakefiles that gem-this generates.
+
+For example, this is what is in *my* `.gem-this` file:
+
+    desc 'Tag the repository in git with gem version number'
+    task :tag => [:gemspec, :package] do
+      if `git diff --cached`.empty?
+        if `git tag`.split("\n").include?("v#{spec.version}")
+          raise "Version #{spec.version} has already been released"
+        end
+        `git add #{File.expand_path("../#{spec.name}.gemspec", __FILE__)}`
+        `git commit -m "Released version #{spec.version}"`
+        `git tag v#{spec.version}`
+        `git push --tags`
+        `git push`
+      else
+        raise "Unstaged changes still waiting to be committed"
+      end
+    end
+
+    desc "Tag and publish the gem to rubygems.org"
+    task :publish => :tag do
+      `gem push pkg/#{spec.name}-#{spec.version}.gem`
+    end
+
+Your workflow is in your hands. Enjoy!
 
 
 Thanks
