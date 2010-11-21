@@ -92,4 +92,22 @@ class GemThisTest < Test::Unit::TestCase
       end
     end
   end
+
+  context "When the user has a .gem-this file" do
+    setup do
+      create_gem_this_file %{
+desc "Something for my gems"
+task :custom_task do
+end
+      }
+      build_gem do
+        touch "README"
+        touch "lib/thing.rb"
+      end
+    end
+
+    should "include custom tasks in the Rakefile" do
+      assert_rake_task :custom_task
+    end
+  end
 end

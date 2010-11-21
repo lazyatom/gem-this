@@ -6,6 +6,11 @@ class GemThis
   SUMMARY = "Creates a Rakefile suitable for turning the current project into a gem."
   DEBUG_MESSAGE = "debug, only prints out the generated Rakefile."
 
+  class << self
+    attr_accessor :custom_task_file
+  end
+  self.custom_task_file = File.expand_path("~/.gem-this")
+
   attr_reader :name, :debug
 
   def initialize(name, options={})
@@ -18,6 +23,7 @@ class GemThis
   def create_rakefile
     template = ERB.new File.read(File.join(File.dirname(__FILE__), '..', 'Rakefile.erb')), nil, '<>'
     rakefile = template.result(binding)
+    rakefile += "\n" + File.read(self.class.custom_task_file) if File.exist?(self.class.custom_task_file)
 
     if debug
       puts rakefile

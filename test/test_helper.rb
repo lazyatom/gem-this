@@ -59,11 +59,12 @@ class Test::Unit::TestCase
 
   def assert_rake_task(task)
     tasks =  in_gem { `rake -T`.split("\n").map { |line| line.split[1] } }
-    assert tasks.include?(task.to_s), tasks.inspect
+    assert tasks.include?(task.to_s), "#{tasks.inspect} did not include #{task}"
   end
 
   def assert_default_rake_task_dependencies_contains(task)
     in_gem {
+      load 'RakeFile'
       assert prerequisites_for('default').include?(task.to_s), prerequisites_for('default').inspect
     }
   end
@@ -77,8 +78,7 @@ class Test::Unit::TestCase
   def in_gem(&block)
     result = nil
     FileUtils.cd(@gem.gem_path) do
-      load 'RakeFile'
-      result = block.call
+      result = yield
     end
     result
   end
@@ -93,6 +93,13 @@ class Test::Unit::TestCase
 
   def gem_spec
     in_gem { YAML.load(`gem specification #{@gem.path_to_gem}`) }
+  end
+
+  def create_gem_this_file(content)
+    t = Tempfile.new('gem-this-task-file')
+    t.puts content
+    t.close
+    GemThis.custom_task_file = t.path
   end
 
   private
