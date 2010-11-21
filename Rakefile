@@ -94,3 +94,8 @@ task :tag => [:gemspec, :package] do
     raise "Unstaged changes still waiting to be committed"
   end
 end
+
+desc "Tag and publish the gem to rubygems.org"
+task :publish => :tag do
+  `gem push pkg/#{spec.name}-#{spec.version}.gem`
+end
