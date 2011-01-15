@@ -110,4 +110,24 @@ end
       assert_rake_task :custom_task
     end
   end
+
+  context "When the user has no .gem-this file specified" do
+    setup do
+      GemThis.custom_task_file = nil
+    end
+
+    should "not raise exception when building gem" do
+      assert_nothing_raised { build_gem {} }
+    end
+  end
+
+  context "When the specified .gem-this file does not exist" do
+    setup do
+      GemThis.custom_task_file = "hopefully/this/file/doesnt/exist"
+    end
+
+    should "not raise exception when building gem" do
+      assert_nothing_raised { build_gem {} }
+    end
+  end
 end
