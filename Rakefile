@@ -80,18 +80,21 @@ task :clean => [:clobber_rdoc, :clobber_package] do
 end
 
 desc 'Tag the repository in git with gem version number'
-task :tag => [:gemspec, :package] do
-  if `git diff --cached`.empty?
+task :tag do
+  changed_files = `git diff --cached --name-only`.split("\n") + `git diff --name-only`.split("\n")
+  if changed_files == ['Rakefile']
+    Rake::Task["package"].invoke
+  
     if `git tag`.split("\n").include?("v#{spec.version}")
       raise "Version #{spec.version} has already been released"
     end
-    `git add #{File.expand_path("../#{spec.name}.gemspec", __FILE__)}`
+    `git add #{File.expand_path("../#{spec.name}.gemspec", __FILE__)} Rakefile`
     `git commit -m "Released version #{spec.version}"`
     `git tag v#{spec.version}`
     `git push --tags`
     `git push`
   else
-    raise "Unstaged changes still waiting to be committed"
+    raise "Repository contains uncommitted changes; either commit or stash."
   end
 end
 
