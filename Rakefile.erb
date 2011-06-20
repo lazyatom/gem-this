@@ -6,7 +6,7 @@ require "rake/rdoctask"
 require "rspec"
 require "rspec/core/rake_task"
 RSpec::Core::RakeTask.new do |t|
-  t.rspec_opts = %w(--format specdoc --colour)
+  t.rspec_opts = %w(--format documentation --colour)
 end
 <% elsif using_test_unit? %>
 require "rake/testtask"
