@@ -5,6 +5,7 @@ require 'tempfile'
 require 'yaml'
 require 'timeout'
 require 'rake'
+require 'gem_this'
 
 class GemBuilder
   attr_reader :gem_path
@@ -30,7 +31,7 @@ class GemBuilder
   def build
     result = nil
     FileUtils.cd(@gem_path) do
-      result = GemThis.new(@name, :debug => false, :silent => true).create_rakefile
+      result = ::GemThis.new(@name, :debug => false, :silent => true).create_rakefile
       `rake package 2>&1`
     end
     result

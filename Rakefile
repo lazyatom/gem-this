@@ -1,6 +1,6 @@
 require "rubygems"
-require "rake/gempackagetask"
-require "rake/rdoctask"
+require "rubygems/package_task"
+require "rdoc/task"
 
 task :default => :test
 
@@ -55,7 +55,7 @@ end
 # .gemspec file, which is useful if something (i.e. GitHub) will
 # be automatically building a gem for this project. If you're not
 # using GitHub, edit as appropriate.
-Rake::GemPackageTask.new(spec) do |pkg|
+Gem::PackageTask.new(spec) do |pkg|
   pkg.gem_spec = spec
 end
 
@@ -68,7 +68,7 @@ end
 task :package => :gemspec
 
 # Generate documentation
-Rake::RDocTask.new do |rd|
+RDoc::Task.new do |rd|
   rd.main = "Readme.markdown"
   rd.rdoc_files.include("Readme.markdown", "lib/**/*.rb")
   rd.rdoc_dir = "rdoc"
