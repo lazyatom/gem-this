@@ -82,7 +82,7 @@ end
 desc 'Tag the repository in git with gem version number'
 task :tag do
   changed_files = `git diff --cached --name-only`.split("\n") + `git diff --name-only`.split("\n")
-  if changed_files == ['Rakefile']
+  if changed_files.empty? || changed_files == ['Rakefile']
     Rake::Task["package"].invoke
   
     if `git tag`.split("\n").include?("v#{spec.version}")
