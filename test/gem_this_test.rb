@@ -13,7 +13,7 @@ class GemThisTest < Test::Unit::TestCase
     should "contain lib files" do
       assert_gem_contains "lib/thing.rb"
     end
-    
+
     should "contain deeply nested files" do
       assert_gem_contains "lib/thing/some/aspect/many/levels/deep.rb"
     end
@@ -26,7 +26,7 @@ class GemThisTest < Test::Unit::TestCase
       assert_gem_spec :require_paths, ["lib"]
     end
   end
-  
+
   context "When building a gem with tests" do
     setup do
       build_gem do
@@ -38,11 +38,11 @@ class GemThisTest < Test::Unit::TestCase
     should "contain test files" do
       assert_gem_contains "test/thing_test.rb"
     end
-    
+
     should "create a rake task for running tests" do
       assert_rake_task :test
     end
-    
+
   end
 
   context "When building a gem with specs" do
@@ -52,7 +52,7 @@ class GemThisTest < Test::Unit::TestCase
         touch "spec/my_spec.rb"
       end
     end
-    
+
     should "contain spec files" do
       assert_gem_contains "spec/my_spec.rb"
     end
